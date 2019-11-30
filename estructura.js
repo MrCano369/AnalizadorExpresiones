@@ -27,15 +27,17 @@ class Pila{
 	}
 }
 
-class ListaDoble{
+class AnalizadorDeExpresiones{//con lista doble y arbol
 	constructor(){
 		this._primero = null;
 		this._ultimo = null;
 		this._pila = new Pila();
+		this._pila2 = new Pila();
 	}
 	get primero(){return this._primero;}
 	get ultimo(){return this._ultimo;}
 	get pila(){return this._pila;}
+	get pila2(){return this._pila2;}
 
 	set primero(v){this._primero = v;}
 	set ultimo(v){this._ultimo = v;}
@@ -71,7 +73,7 @@ class ListaDoble{
 		this.eliminar(nodo.sig);
 	}
 
-	generarArbol(){
+	analizarExpresion(){
 		var actual = this._primero;
 		while(actual){
 			if (actual.dato == "*" || actual.dato == "/") {
@@ -89,8 +91,8 @@ class ListaDoble{
 		}
 
 		this.preOrder();
-
-
+		this.resolver();
+		return this._pila2.ultimo.dato;
 	}
 
 	imprimir(p = this._primero){
@@ -100,12 +102,40 @@ class ListaDoble{
 		}
 	}
 
-	calcular(){
+	resolver(){
+		var actual = this._pila.ultimo;
+		while(actual){
+			if (isNaN(actual.dato)) {
+				var n1 = this._pila2.sacar().dato;
+				var n2 = this._pila2.sacar().dato;
+				this._pila2.agregar(new Nodo(this.operacion(n1, actual.dato, n2)));
+			}else{
+				this._pila2.agregar(new Nodo(actual.dato));
+			}
+			actual = actual.ant;
+		}
+	}
 
+	operacion(n1, o, n2){
+		n1 = Number(n1);
+		n2 = Number(n2);
+		switch(o){
+			case "+":
+				return n1 + n2;
+			break;
+			case "-":
+				return n1 - n2;
+			break;
+			case "*":
+				return n1 * n2;
+			break;
+			case "/":
+				return n1 / n2;
+			break;
+		}
 	}
 	
 	preOrder(r = this._primero){
-		console.log(r.dato);
 		this._pila.agregar(new Nodo(r.dato));
 		if (r.izq) {
 			this.preOrder(r.izq);

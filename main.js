@@ -1,8 +1,12 @@
-var s = "3*6-7/4*8+1";
-var liD = new ListaDoble();
+function ResolverExpresion(s) {//numeros de un digito
+	var Exp = new AnalizadorDeExpresiones();
 
-for (var i = 0; i < s.length; i++) {
-	liD.agregar(new Nodo(s.charAt(i)));
+	for (var i = 0; i < s.length; i++) {
+		Exp.agregar(new Nodo(s.charAt(i)));
+	}
+
+	var result = Exp.analizarExpresion();
+	console.log(result);
 }
 
-liD.generarArbol();
+ResolverExpresion("3*6-7/4*8+1");
